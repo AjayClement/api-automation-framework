@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongodb
+    container_name: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    restart: always
+    ports:
+      - "8081:8081"
+  json-server:
+    container_name: json-server-container
+    image: json-server-image
+    build: ./src/main/resources/mock-api
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/main/resources/mock-api/donuts.json:/data/db.json
+    command: json-server --watch /data/db.json --host 0.0.0.0
+
+networks:
+  default:
+    name: mongodb_network
