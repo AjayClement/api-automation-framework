@@ -3,6 +3,7 @@ services:
   mongodb:
     image: mongo
     container_name: mongodb
+    restart: always
     ports:
       - "27017:27017"
     volumes:
@@ -22,7 +23,7 @@ services:
     image: json-server-image
     build: ./src/main/resources/mock-api
     ports:
-      - 3000:3000
+      - "3000:3000"
     volumes:
       - ./src/main/resources/mock-api/donuts.json:/data/db.json
     command: json-server --watch /data/db.json --host 0.0.0.0
